@@ -1,0 +1,23 @@
+{
+  "name": "compliance",
+  "version": "0.0.0",
+  "description": "validate compliance of a javascript implementation against test specs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bzb-stcnx/compliance.git"
+  },
+  "keywords": [
+    "spec",
+    "compliance"
+  ],
+  "author": "bzb-stcnx",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bzb-stcnx/compliance/issues"
+  },
+  "homepage": "https://github.com/bzb-stcnx/compliance#readme"
+}
