@@ -12,7 +12,10 @@
   },
   "keywords": [
     "spec",
-    "compliance"
+    "compliance",
+    "dependency injection",
+    "interface",
+    "implementation"
   ],
   "author": "bzb-stcnx",
   "license": "MIT",
