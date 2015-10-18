@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "validate compliance of a javascript module against a test suite module",
   "main": "index.js",
+  "bin": "bin/cmd.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,6 +12,7 @@
     "url": "git+https://github.com/bzb-stcnx/compliance.git"
   },
   "keywords": [
+    "browserify-transform",
     "spec",
     "compliance",
     "dependency injection",
