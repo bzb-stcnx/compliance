@@ -10,14 +10,14 @@ compliance is validated by running the implementation module against the test su
 
 # configuration
 ## interface modules
-test suites in interface modules simply `require('compliant')` to access the implementation module
+* test suites in interface modules `require('compliant')` to access the implementation module
 that `compliance` will inject when running the suites.
+* additionally, `browserify` is configured with `compliance` as a transform, allowing it to inject the implementation module when generating the test bundle.
 
 ## implementation module
-the implementation module naturally lists all interface modules it implements as `dependencies` in its `package.json` file.
-as for any other entry in `dependencies`, this clearly defines the desired versions of all interface modules.
-
-additionally, all interface modules against which the implementation module should be tested are listed in a dedicated `compliance` entry of `package.json`, e.g.:
+* the implementation module naturally lists all interface modules it implements as `dependencies` in its `package.json` file.
+as for any other entry in `dependencies`, this clearly defines the desired version of each interface module.
+* additionally, each interface module against which the implementation module should be tested is listed in a dedicated `compliance` entry of `package.json`, e.g.:
 ```json
 "compliance": [ "an-interface-module", "another-interface-module", ... ]
 ```
@@ -26,11 +26,11 @@ additionally, all interface modules against which the implementation module shou
 
 # compliance validation
 to validate compliance of an implementation module against declared interface modules,
-run the `compliance` command from the `test` script.
+run the `compliance` command from the `test` script of the implementation module.
 
 # test frameworks
-initially, test suites are restricted to the `karma` framework.
-the objective is to eventually support other test frameworks, maybe through a plugin architecture.
+`compliance` supports test frameworks that play well with `browserify` to build the test bundle for the browser.
+this at least includes [karma](http://karma-runner.github.io/) with [karma-browserify](https://www.npmjs.com/package/karma-browserify) but should also include most frameworks.
 
 # dependency injection
 `compliance` allows to define dependencies as interfaces rather than implementations.
