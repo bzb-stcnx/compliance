@@ -1,4 +1,6 @@
 # compliance
+[![NPM](https://nodei.co/npm/compliance.png?compact=true)](https://nodei.co/npm/compliance/)
+
 [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
 validate compliance of a javascript module against a test suite module.
