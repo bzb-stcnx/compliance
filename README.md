@@ -14,7 +14,7 @@ compliance is validated by running the implementation module against the test su
 
 # configuration
 ## interface modules
-* test suites in interface modules `require('compliant')` to access the implementation module
+* test suites in interface modules `require('compliance/applicant')` to access the implementation module
 that `compliance` will inject when running the suites.
 * additionally, `browserify` is configured with `compliance` as a transform, allowing it to inject the implementation module when generating the test bundle.
 
