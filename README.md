@@ -1,4 +1,6 @@
 # compliance
+[![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
+
 validate compliance of a javascript module against a test suite module.
 
 primarily intended for validating that a module implements given interfaces.
