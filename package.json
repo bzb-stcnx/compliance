@@ -30,7 +30,8 @@
   },
   "homepage": "https://github.com/bzb-stcnx/compliance#readme",
   "dependencies": {
-    "through2": "^2.0.0"
+    "through2": "^2.0.0",
+    "through2-map": "^2.0.0"
   },
   "devDependencies": {
     "chokidar-cli": "^1.0.1",

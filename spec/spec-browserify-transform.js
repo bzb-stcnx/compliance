@@ -33,7 +33,9 @@ describe('compliance browserify transform:', function () {
       fixtures = __dirname + '/support/fixtures/'
       mockInterfaceSpecFile = path.normalize(fixtures + 'mock-interface-spec.js')
       expectedInterfaceSpecFile = path.normalize(fixtures + 'expected-interface-spec.js')
-      opts = { 'compliance/applicant': COMPLIANCE_APPLICANT }
+      opts = {
+        'map': { 'compliance/applicant': COMPLIANCE_APPLICANT }
+      }
     })
 
     afterEach(function () {
