@@ -1,9 +1,9 @@
-#!/usr/bin/env node
-
+'use strict'
 /* (c) Copyright 2015, bzb-stcnx
  * all rights reserved
  * SEE LICENSE IN ./LICENSE
  */
 
-// var spawn = require('child_process').spawn
-
+module.exports = function (file, opts) {
+  opts = opts || {}
+}

@@ -5,7 +5,11 @@
   "main": "index.js",
   "bin": "bin/cmd.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean:deps": "rimraf node_modules/*",
+    "clean": "npm run clean:deps && npm install",
+    "test": "jasmine",
+    "preversion": "npm test",
+    "watch": "chokidar 'spec/*.js' -c 'npm test' --initial"
   },
   "repository": {
     "type": "git",
@@ -15,14 +19,21 @@
     "browserify-transform",
     "spec",
     "compliance",
-    "dependency injection",
+    "dependency-injection",
     "interface",
     "implementation"
   ],
   "author": "bzb-stcnx",
-  "license": "MIT",
+  "license": "SEE LICENSE IN ./LICENSE",
   "bugs": {
     "url": "https://github.com/bzb-stcnx/compliance/issues"
   },
-  "homepage": "https://github.com/bzb-stcnx/compliance#readme"
+  "homepage": "https://github.com/bzb-stcnx/compliance#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "chokidar-cli": "^1.0.1",
+    "jasmine": "^2.3.2",
+    "jasmine-core": "^2.3.4",
+    "rimraf": "^2.4.3"
+  }
 }
