@@ -13,7 +13,7 @@ describe('compliance shell command:', function () {
 
   beforeEach(function () {
     fs = require('fs')
-    cmd = fs.readFileSync(__dirname + '/../bin/cmd.js')
+    cmd = fs.readFileSync(__dirname + '/../bin/cmd.js', 'utf8')
   })
 
   it('is a node executable', function () {

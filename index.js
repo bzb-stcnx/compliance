@@ -4,6 +4,10 @@
  * SEE LICENSE IN ./LICENSE
  */
 
+var through = require('through2')
+
 module.exports = function (file, opts) {
   opts = opts || {}
+
+  return through()
 }

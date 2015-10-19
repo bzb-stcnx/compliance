@@ -1,0 +1,4 @@
+var COMPLIANCE_APPLICANT = '__COMPLIANCE_APPLICANT__'
+
+var applicant = require('__COMPLIANCE_APPLICANT__')
+
