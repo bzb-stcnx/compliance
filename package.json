@@ -8,7 +8,7 @@
     "clean:deps": "rimraf node_modules/*",
     "clean": "npm run clean:deps && npm install",
     "test": "jasmine",
-    "preversion": "npm test",
+    "preversion": "npm test || echo -e '\\e[43mWARNING\\e[49m tests failed'",
     "watch": "chokidar 'spec/*.js' -c 'npm test' --initial"
   },
   "repository": {
