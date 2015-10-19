@@ -23,7 +23,9 @@ see [dependency injection](#dependency-injection) below.
 * test suites in interface modules `require('compliance/applicant')` to access the implementation module
 that `compliance` will inject before running the suites.
 * additionally, `browserify` is configured with `compliance` as a [transform](https://github.com/substack/browserify-handbook#browserifytransform-field),
-allowing it to inject the implementation module when generating the test bundle.
+allowing it to inject the implementation module when generating the test bundle:
+all occurrences of single- or double-quoted `compliance/applicant` are replaced
+with respectively single- or double-quoted file path of the implementation module.
 
 ### implementation module
 * the implementation module naturally lists all interface modules it implements as `dependencies` in its `package.json` file.
