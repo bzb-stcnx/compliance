@@ -5,35 +5,44 @@
 
 validate compliance of a javascript module against a test suite module.
 
-primarily intended for validating that a module implements given interfaces.
+primarily intended for **validating that a module implements given interfaces**.
 interfaces are modules which contain compliance test suites,
 together with additional interface-related files,
 such as typescript type declaration files `.d.ts`.
 
 compliance is validated by running the implementation module against the test suites from the declared interface modules.
 
-# configuration
-## interface modules
-* test suites in interface modules `require('compliance/applicant')` to access the implementation module
-that `compliance` will inject when running the suites.
-* additionally, `browserify` is configured with `compliance` as a transform, allowing it to inject the implementation module when generating the test bundle.
+# motivation
+"program to an interface, not an implementation" - GoF
 
-## implementation module
+see [dependency injection](#dependency-injection) below.
+
+# usage
+## configuration
+### interface modules
+* test suites in interface modules `require('compliance/applicant')` to access the implementation module
+that `compliance` will inject before running the suites.
+* additionally, `browserify` is configured with `compliance` as a [transform](https://github.com/substack/browserify-handbook#browserifytransform-field),
+allowing it to inject the implementation module when generating the test bundle.
+
+### implementation module
 * the implementation module naturally lists all interface modules it implements as `dependencies` in its `package.json` file.
 as for any other entry in `dependencies`, this clearly defines the desired version of each interface module.
 * additionally, each interface module against which the implementation module should be tested is listed in a dedicated `compliance` entry of `package.json`, e.g.:
 ```json
 "compliance": [ "an-interface-module", "another-interface-module", ... ]
 ```
-* interface modules listed as `compliance` but not listed in `dependencies` are ignored and will trigger a corresponding warning during compliance validation
-* compliance will only be validated against the test suites from interface modules listed as `compliance`
 
-# compliance validation
+## compliance validation
 to validate compliance of an implementation module against declared interface modules,
-run the `compliance` command from the `test` script of the implementation module.
+run the `compliance` command from the shell or a `test` script of the implementation module.
+* interface modules listed as `compliance` in the implementation module's `package.json` but not listed in its `dependencies` are ignored
+and will trigger a corresponding warning during compliance validation
+* compliance will only be validated against the test suites from interface modules listed as `compliance` in the implementation module's `package.json`
+* the version of the interface module against which an implementation module is validated is that listed in its `dependencies`
 
-# test frameworks
-`compliance` supports test frameworks that play well with `browserify` to build the test bundle for the browser.
+# test runners
+`compliance` supports test runners that play well with `browserify` to build the test bundle for the browser.
 this at least includes [karma](http://karma-runner.github.io/) with [karma-browserify](https://www.npmjs.com/package/karma-browserify) but should also include most frameworks.
 
 # dependency injection
