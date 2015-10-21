@@ -5,6 +5,7 @@
  */
 
 var fs = require('fs')
+var format = require('util').format
 var map = require('through2-map')
 var ERROR = require('./lib/errors.js')
 var COMPLIANCE_APPLICANT_KEY = 'compliance/applicant'
@@ -17,11 +18,11 @@ module.exports = function (file, opts) {
       process.env.COMPLIANCE_APPLICANT
 
   if (typeof tokenMap[COMPLIANCE_APPLICANT_KEY] === 'undefined') {
-    throw ERROR.UNDEFINED_APPLICANT
+    throw format(ERROR.UNDEFINED_APPLICANT, COMPLIANCE_APPLICANT_KEY)
   }
 
   if (typeof file === 'undefined') {
-    throw ERROR.FILE
+    throw format(ERROR.NOT_FOUND, 'file')
   }
 
   // checking read access might not be of any use after all,
@@ -31,7 +32,7 @@ module.exports = function (file, opts) {
   try {
     fs.accessSync(file, fs.R_OK)
   } catch (err) {
-    throw ERROR.FILE
+    throw format(ERROR.CANNOT_READ, file)
   }
 
   return map({ wantStrings: true }, function (str) {
