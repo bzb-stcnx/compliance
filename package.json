@@ -30,14 +30,16 @@
   },
   "homepage": "https://github.com/bzb-stcnx/compliance#readme",
   "dependencies": {
-    "through2": "^2.0.0",
-    "through2-map": "^2.0.0"
+    "resolve": "^1.1.6",
+    "through2-map": "^2.0.0",
+    "yalookup": "^0.1.2"
   },
   "devDependencies": {
     "chokidar-cli": "^1.0.1",
     "concat-stream": "^1.5.1",
     "jasmine": "^2.3.2",
     "jasmine-core": "^2.3.4",
+    "mockery": "^1.4.0",
     "rimraf": "^2.4.3"
   }
 }
