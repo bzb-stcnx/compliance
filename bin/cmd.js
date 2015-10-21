@@ -2,8 +2,8 @@
 
 /* (c) Copyright 2015, bzb-stcnx
  * all rights reserved
- * SEE LICENSE IN ./LICENSE
+ * SEE LICENSE IN ../LICENSE
  */
 
-// var spawn = require('child_process').spawn
-
+require('../lib/cmd.js')()
+process.exit()
