@@ -5,7 +5,13 @@
 
 /* eslint-env jasmine */
 
-var ERROR = require('../lib/errors.js') // need these defs for spec descriptions
+// need these defs for spec descriptions
+var format = require('util').format
+var ERROR = require('../lib/errors.js')
+var FILE_NOT_FOUND = format(ERROR.NOT_FOUND, 'file')
+var CANNOT_READ_FILE = format(ERROR.CANNOT_READ, __dirname + '/__file__')
+var UNDEFINED_COMPLIANCE_APPLICANT =
+  format(ERROR.UNDEFINED_APPLICANT, 'compliance/applicant')
 
 describe('compliance browserify transform:', function () {
   'use strict'
@@ -69,19 +75,32 @@ describe('compliance browserify transform:', function () {
       var undefinedFile, unreadableFile, undefinedOpts
 
       beforeEach(function () {
-        undefinedFile = function () { compliance(undefined, opts) }
-        unreadableFile = function () { compliance(__dirname + './---', opts) }
+        undefinedFile = function () {
+          compliance(undefined, opts)
+        }
+        unreadableFile = function () {
+          compliance(path.join(__dirname, '__file__'), opts)
+        }
         undefinedOpts = function () { compliance(mockInterfaceSpecFile) }
       })
 
-      it('a "' + ERROR.FILE + '" if file is undefined or cannot be read', function () {
-        expect(undefinedFile).toThrow(ERROR.FILE)
-        expect(unreadableFile).toThrow(ERROR.FILE)
-      })
+      it('a "' + FILE_NOT_FOUND +
+         '" error if file is undefined or cannot be read',
+         function () {
+           expect(undefinedFile).toThrow(FILE_NOT_FOUND)
+         })
 
-      it('a "' + ERROR.UNDEFINED_APPLICANT + '" if neither opts.map nor process.env.COMPLIANCE_APPLICANT are defined', function () {
-        expect(undefinedOpts).toThrow(ERROR.UNDEFINED_APPLICANT)
-      })
+      it('a "' + CANNOT_READ_FILE +
+         '" error if file is undefined or cannot be read',
+         function () {
+           expect(unreadableFile).toThrow(CANNOT_READ_FILE)
+         })
+
+      it('a "' + UNDEFINED_COMPLIANCE_APPLICANT +
+         '" if neither opts.map nor process.env.COMPLIANCE_APPLICANT are defined',
+         function () {
+           expect(undefinedOpts).toThrow(UNDEFINED_COMPLIANCE_APPLICANT)
+         })
     })
 
     describe('returns', function () {
