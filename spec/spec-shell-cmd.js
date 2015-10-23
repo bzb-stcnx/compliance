@@ -7,7 +7,7 @@
 /* eslint-env jasmine */
 
 var fs, path, format
-var createSpy
+var createSpy, cmdRunner
 var mockery
 var ERROR
 
@@ -16,6 +16,7 @@ beforeEach(function () {
   path = require('path')
   format = require('util').format
   createSpy = require('./support/create-spy.js')
+  cmdRunner = require('./support/cmd-runner.js')
   mockery = require('mockery')
   ERROR = require('../lib/errors.js')
 })
@@ -126,31 +127,71 @@ describe('compliance shell command:', function () {
         ENV = { 'COMPLIANCE_APPLICANT': PACKAGE_FILE_MAIN_PATH }
         COUNT = PACKAGE_FILE.compliance.length
         INTERFACE_PACKAGE_CWD = path.dirname(INTERFACE_PACKAGE_FILE_PATH)
-        cmd()
       })
 
-      it('runs a local shell for each of these', function () {
-        expect(mock.childProcess.execSync.calls.count()).toBe(COUNT)
+      describe('and if each of these dependencies includes a "test" script,', function () {
+        var getOptionEnv, getOptionCwd, getScript
+        var result
+
+        beforeEach(function () {
+          getOptionEnv = function (args) {
+            return args[1].env
+          }
+          getOptionCwd = function (args) {
+            return args[1].cwd
+          }
+          getScript = function (args) {
+            return args[0]
+          }
+          result = []
+        })
+
+        it('runs a local shell for each of these', function () {
+          expect(cmd).not.toThrow()
+          expect(mock.childProcess.execSync.calls.count()).toBe(COUNT)
+        })
+
+        it('sets a local "COMPLIANCE_APPLICANT" environment variable ' +
+          'to the absolute path of the implementation module', function () {
+            expect(cmdRunner(cmd, mock.childProcess.execSync, getOptionEnv, result))
+            .not.toThrow()
+            expect(result).toEqual([
+              jasmine.objectContaining(ENV),
+              jasmine.objectContaining(ENV),
+              jasmine.objectContaining(ENV)
+            ])
+          })
+
+        it('sets the local work dir to the absolute path of the interface module',
+          function () {
+            expect(cmdRunner(cmd, mock.childProcess.execSync, getOptionCwd, result))
+            .not.toThrow()
+            expect(result).toEqual([
+              INTERFACE_PACKAGE_CWD,
+              INTERFACE_PACKAGE_CWD,
+              INTERFACE_PACKAGE_CWD
+            ])
+          })
+
+        it('executes the test scripts of interface modules', function () {
+          expect(cmdRunner(cmd, mock.childProcess.execSync, getScript, result))
+          .not.toThrow()
+          expect(result).toEqual([ SCRIPT, SCRIPT, SCRIPT ])
+        })
       })
 
-      it('sets a local "COMPLIANCE_APPLICANT" environment variable ' +
-        'to the absolute path of the implementation module', function () {
-          var options = mock.childProcess.execSync.calls.argsFor(0)[1]
-          expect(options.env).toEqual(jasmine.objectContaining(ENV))
+      describe('but if an interface module does not include a "test" script,', function () {
+        var TEST_SCRIPT_NOT_FOUND
+
+        beforeEach(function () {
+          delete INTERFACE_PACKAGE_FILE.scripts.test
+          TEST_SCRIPT_NOT_FOUND =
+            format(ERROR.NOT_FOUND_IN, 'test script', PACKAGE_FILE.compliance[0])
         })
 
-      it('sets the local work dir to the absolute path of the interface module',
-        function () {
-          var options = mock.childProcess.execSync.calls.argsFor(0)[1]
-          expect(options.cwd).toBe(INTERFACE_PACKAGE_CWD)
+        it('throws and complains about the missing script', function () {
+          expect(cmd).toThrowError(TEST_SCRIPT_NOT_FOUND)
         })
-
-      it('executes the test scripts of interface modules', function () {
-        var isExpectedScript = mock.childProcess.execSync.calls.allArgs()
-        .every(function (args) {
-          return args[0] === SCRIPT
-        })
-        expect(isExpectedScript).toBe(true)
       })
     })
   })

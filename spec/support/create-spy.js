@@ -6,8 +6,6 @@
 
 /* eslint-env jasmine */
 
-module.exports = createSpy
-
 /**
  * @description recursively create a hierarchically defined spy object
  * @example
@@ -25,7 +23,7 @@ module.exports = createSpy
  *     the resulting value being a spy function named after the key
  *   * object-value entries are recursively mapped to their key
  */
-function createSpy (name) {
+var createSpy = module.exports = function createSpy (name) {
   if (typeof name === 'string') return createSpyFunction(name)
   if (Array.isArray(name)) return name.reduce(reducer(createSpyFunction), {})
   if (typeof name !== 'object') throw new Error('incorrect spy definition')
