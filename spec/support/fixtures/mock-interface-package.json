@@ -1,19 +1,14 @@
 {
-  "name": "compliance",
-  "version": "0.1.3",
-  "description": "validate compliance of a javascript module against a test suite module",
+  "name": "interface",
+  "version": "9.9.9",
+  "description": "mock interface",
   "main": "index.js",
-  "bin": "bin/cmd.js",
   "scripts": {
     "clean:deps": "rimraf node_modules/*",
     "clean": "npm run clean:deps && npm install",
     "test": "jasmine",
     "preversion": "npm test || echo -e '\\e[43mWARNING\\e[49m tests failed'",
     "watch": "chokidar 'index.js' 'bin/cmd.js' 'lib/' 'spec/support/fixtures/' 'spec/*.js' -c 'npm test' --initial"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/bzb-stcnx/compliance.git"
   },
   "keywords": [
     "browserify-transform",
@@ -25,10 +20,6 @@
   ],
   "author": "bzb-stcnx",
   "license": "SEE LICENSE IN ./LICENSE",
-  "bugs": {
-    "url": "https://github.com/bzb-stcnx/compliance/issues"
-  },
-  "homepage": "https://github.com/bzb-stcnx/compliance#readme",
   "dependencies": {
     "krash": "^0.1.3",
     "resolve": "^1.1.6",

@@ -1,30 +1,45 @@
 # compliance
 [![NPM](https://nodei.co/npm/compliance.png?compact=true)](https://nodei.co/npm/compliance/)
-
-[![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
-
+[![build status](https://secure.travis-ci.org/bzb-stcnx/compliance.png)](http://travis-ci.org/bzb-stcnx/compliance)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
 validate compliance of a javascript module against a test suite module.
 
 primarily intended for **validating that a module implements given interfaces**.
-interfaces are implemented as modules which contain compliance test suites,
-eventually together with additional interface-related files,
+interfaces are implemented as modules which contain compliance test suites.
+
+compliance of an implementation module to a set of interface modules
+is validated by running the implementation module against the test suites
+from the declared interface modules.
+this is supplementary to static type-checking as it ensures
+that an implementation module not only exposes the proper object and method signatures
+but that it also provides the expected functionality
+defined in the test suites of the interface modules.
+
+although this goes beyond the current scope of this project,
+interface modules are a good place to keep additional interface-related files,
 such as typescript type declaration files `.d.ts`.
 
-compliance is validated by running the implementation module against the test suites
-from the declared interface modules.
-
 compliance has zero impact on production runtime:
-it is intended for the development phase of a project.
+like static type-checking, it runs during the development phase of a project.
 
 # motivation
 "program to an interface, not an implementation" - GoF
 
 see [dependency injection](#dependency-injection) below.
 
+# test runners
+`compliance` currently relies on [browserify](https://www.npmjs.com/package/browserify)
+during compliance testing.
+`compliance` supports test runners that play well with `browserify`
+to build the test bundle for the browser.
+this includes [karma](http://karma-runner.github.io/) with [karma-browserify](https://www.npmjs.com/package/karma-browserify).
+
 # usage
 ## configuration
+to enable compliance testing of an implementation module to interface module specs,
+the implementation and the interface modules should be set up as follows:
+
 ### interface modules
 * test suites in interface modules `require('compliance/applicant')`
 to access the implementation module
@@ -58,12 +73,6 @@ listed as `compliance` in the implementation module's `package.json`
 * the version of the interface module against which an implementation module
 is validated is that listed in its `dependencies`
 
-# test runners
-`compliance` currently relies on browserify during compliance testing.
-`compliance` supports test runners that play well with `browserify`
-to build the test bundle for the browser.
-this includes [karma](http://karma-runner.github.io/) with [karma-browserify](https://www.npmjs.com/package/karma-browserify).
-
 # dependency injection
 `compliance` allows to define dependencies as interfaces rather than implementations.
 * library modules (i.e. modules meant to be called upon by client code) can list
@@ -86,9 +95,9 @@ against the required interface module by the implementations module test suite.
   * or to run the interface's test suites on the injected module.
 
 # status
+[![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 this project is currently in concept phase - not appropriate for production.
 
 # license
 (C) Copyright 2015, bzb-stcnx,
-all rights reserved.
 [MIT](./LICENSE)
