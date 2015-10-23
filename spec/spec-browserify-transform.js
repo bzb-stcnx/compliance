@@ -8,7 +8,7 @@
 // need these defs for spec descriptions
 var format = require('util').format
 var ERROR = require('../lib/errors.js')
-var FILE_NOT_FOUND = format(ERROR.NOT_FOUND, 'file')
+var CANNOT_READ_UNDEFINED = format(ERROR.CANNOT_READ, 'undefined')
 var CANNOT_READ_FILE = format(ERROR.CANNOT_READ, __dirname + '/__file__')
 var UNDEFINED_COMPLIANCE_APPLICANT =
   format(ERROR.UNDEFINED_APPLICANT, 'compliance/applicant')
@@ -84,22 +84,17 @@ describe('compliance browserify transform:', function () {
         undefinedOpts = function () { compliance(mockInterfaceSpecFile) }
       })
 
-      it('a "' + FILE_NOT_FOUND +
+      it('a "' + ERROR.CANNOT_READ +
          '" error if file is undefined or cannot be read',
          function () {
-           expect(undefinedFile).toThrow(FILE_NOT_FOUND)
-         })
-
-      it('a "' + CANNOT_READ_FILE +
-         '" error if file is undefined or cannot be read',
-         function () {
-           expect(unreadableFile).toThrow(CANNOT_READ_FILE)
+           expect(undefinedFile).toThrowError(CANNOT_READ_UNDEFINED)
+           expect(unreadableFile).toThrowError(CANNOT_READ_FILE)
          })
 
       it('a "' + UNDEFINED_COMPLIANCE_APPLICANT +
          '" if neither opts.map nor process.env.COMPLIANCE_APPLICANT are defined',
          function () {
-           expect(undefinedOpts).toThrow(UNDEFINED_COMPLIANCE_APPLICANT)
+           expect(undefinedOpts).toThrowError(UNDEFINED_COMPLIANCE_APPLICANT)
          })
     })
 

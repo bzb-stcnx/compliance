@@ -5,34 +5,48 @@
  */
 
 var fs = require('fs')
-var format = require('util').format
 var map = require('through2-map')
+var abort = require('krash')
 var ERROR = require('./lib/errors.js')
 var COMPLIANCE_APPLICANT_KEY = 'compliance/applicant'
+// shim fs.accessSync for node < 0.12
+var accessSync = isDefined(fs.F_OK)
+  ? fs.accessSync.bind(fs) : accessSyncShim
 
+/**
+ * @description browserify transform that injects
+ * the implementation module when generating the test bundle:
+ * all occurrences of single- or double-quoted `compliance/applicant`
+ * are replaced with respectively the single- or double-quoted
+ * file path of the implementation module.
+ * @param {string} file
+ * @param {object} opts
+ * @return {Stream} that maps occurrences of single- or double-quoted
+ * 'compliance/applicant' strings respectively to single- or double-
+ * quoted file path of the implementation module.
+ * @throws ERROR.CANNOT_READ if file cannot be accessed
+ * @throws ERROR.UNDEFINED_APPLICANT
+ * if neither the COMPLIANCE_APPLICANT environment variable
+ * nor if a map option is missing from the browserify transform
+ * configuration
+ */
 module.exports = function (file, opts) {
   var tokenMap = {}
 
   tokenMap[COMPLIANCE_APPLICANT_KEY] =
-    opts && opts.map && opts.map[COMPLIANCE_APPLICANT_KEY] ||
-      process.env.COMPLIANCE_APPLICANT
-
-  if (typeof tokenMap[COMPLIANCE_APPLICANT_KEY] === 'undefined') {
-    throw format(ERROR.UNDEFINED_APPLICANT, COMPLIANCE_APPLICANT_KEY)
-  }
-
-  if (typeof file === 'undefined') {
-    throw format(ERROR.NOT_FOUND, 'file')
-  }
+    abort.unless(opts && opts.map && opts.map[COMPLIANCE_APPLICANT_KEY] ||
+      process.env.COMPLIANCE_APPLICANT,
+      isDefined,
+      ERROR.UNDEFINED_APPLICANT, COMPLIANCE_APPLICANT_KEY)
 
   // checking read access might not be of any use after all,
   // since it provides no guarantee that file will still be available
   // during tokenMap processing,
   // but it is currently required by unit tests.
   try {
-    fs.accessSync(file, fs.R_OK)
+    accessSync(file, fs.R_OK)
   } catch (err) {
-    throw format(ERROR.CANNOT_READ, file)
+    abort.now(ERROR.CANNOT_READ, file)
   }
 
   return map({ wantStrings: true }, function (str) {
@@ -72,4 +86,23 @@ function mapper (map) {
  */
 function quote (str, char) {
   return '' + char + str + char
+}
+
+/**
+ * @description simple shim of fs.accessSync for node < 0.12.
+ * ignores mode argument in fs.accessSync(path, [mode])
+ * @param {string} path
+ * @throws ERROR.NOT_FOUND if fs.existsSync(path) returns false
+ * @see fs#accessSync
+ */
+function accessSyncShim (path) {
+  abort.unless(path, fs.existsSync, ERROR.NOT_FOUND, path)
+}
+
+/**
+ * @param {any} val
+ * @return {boolean} true if val is not undefined or null
+ */
+function isDefined (val) {
+  return (typeof val !== 'undefined') && (val !== null)
 }
