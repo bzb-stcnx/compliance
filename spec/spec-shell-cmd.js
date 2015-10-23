@@ -85,7 +85,7 @@ describe('compliance shell command:', function () {
       mockery.registerMock(PACKAGE_FILE_PATH, PACKAGE_FILE)
       mockery.registerMock(INTERFACE_PACKAGE_FILE_PATH, INTERFACE_PACKAGE_FILE)
       // finally import cmd with mocked dependencies
-      cmd = require('../lib/cmd.js') 
+      cmd = require('../lib/cmd.js')
     })
 
     afterEach(function () {
@@ -99,7 +99,7 @@ describe('compliance shell command:', function () {
     })
 
     describe('if an entry of the implementation module\'s package.json "compliance" ' +
-      'entry is not listed as "dependency"', function () {
+    'entry is not listed as "dependency"', function () {
       var THROW
 
       beforeEach(function () {
@@ -109,14 +109,14 @@ describe('compliance shell command:', function () {
       })
 
       it('throws and complains about the missing entry ' +
-        'before running any local shells', function () {
+      'before running any local shells', function () {
         expect(cmd).toThrowError(THROW)
         expect(mock.childProcess.execSync.calls.count()).toBe(0)
       })
     })
 
     describe('if all entries of the implementation module\'s package.json "compliance" ' +
-      'entry are also listed as "dependencies",', function () {
+    'entry are also listed as "dependencies",', function () {
       var INTERFACE_PACKAGE_CWD, SCRIPT, ENV, COUNT
 
       beforeEach(function () {
@@ -144,6 +144,14 @@ describe('compliance shell command:', function () {
           var options = mock.childProcess.execSync.calls.argsFor(0)[1]
           expect(options.cwd).toBe(INTERFACE_PACKAGE_CWD)
         })
+
+      it('executes the test scripts of interface modules', function () {
+        var isExpectedScript = mock.childProcess.execSync.calls.allArgs()
+        .every(function (args) {
+          return args[0] === SCRIPT
+        })
+        expect(isExpectedScript).toBe(true)
+      })
     })
   })
 })
